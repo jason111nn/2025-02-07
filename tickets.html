@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/jquery.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
+    <script src="./js/bootstrap.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="home.html">Home</a>
+        <a href="news.html">News</a>
+        <img src="./img/logo.png" alt="LOGO">
+        <a href="business.html">Business</a>
+        <a href="tickets.html">Tickets</a>
+    </header>
+    <main>
+        <form method="post" onsubmit="Tickets(event)">
+            <input type="text" name="firstname" placeholder="First name(名字)" required>
+            <input type="text" name="lastname" placeholder="Last name(姓氏)" required>
+            <input type="text" name="phone" placeholder="Phone(手機號碼)" required>
+            <input type="password" name="password" placeholder="Password(會員密碼)" required>
+            <h4>由小到大排列</h4>
+            <div class="sortable-box">
+                
+            </div>
+            <div id="ans"></div>
+            <div>
+                <button type="button" onclick="reset();">Reset(重設)</button>
+                <button type="submit">Submit(送出按鈕)</button>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <img src="./img/facebook.png" alt="">
+        <img src="./img/google.png" alt="">
+        Copyright © 2024 FIBEX All Rights Reserved
+    </footer>
+    <script>
+        const sortable = $(".sortable-box");
+        let ans=[]
+
+        $(document).ready(function () {
+            veri();
+            sortable.sortable({
+                items: ".sortable-item",
+                cursor: "move"
+            });
+        });
+
+        function reset() {
+            veri();
+            $("input:text").val('');
+            $("input:password").val('');
+        }
+
+        function veri() {
+            sortable.empty();
+            for (let i = 0; i < 4; i++) {
+                const veri = Math.floor(Math.random() * 10);
+                ans.push(veri)
+                sortable.append(`<div class="sortable-item" data-index="${veri}">${veri}</div>`);
+            }
+            ans=ans.sort().join("")
+        }
+
+        function Tickets(event) {
+            event.preventDefault();
+            const items = $(".sortable-item");
+
+            let userans=""
+            document.querySelectorAll("#ans.sortable-item").forEach(function(event) {
+                userans=userans+event.dataset.index
+            })
+            // ans
+            // const numbers = items.map(function () {
+            //     return parseInt($(this).data("index"));
+            // }).get();
+
+            // if (numbers.every((val, i, arr) => i === 0 || arr[i - 1] <= val)) {
+            if (userans==ans) {
+                const form = $("form")[0];
+                const formData = new FormData(form);
+
+                fetch('./post.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => response.text())
+                    .then(result => {
+                        alert(result);
+                        location.href = "./home.html";
+                    })
+            } else {
+                alert("驗證碼排列錯誤");
+            }
+        }
+    </script>
+</body>
+
+</html>
