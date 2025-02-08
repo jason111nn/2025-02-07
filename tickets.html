@@ -62,7 +62,7 @@
             <div class="drag-box"></div>
             <div id="ans">請拖曳數字到這裡</div>
             <div>
-                <button type="button" onclick="reset2()">Reset(重設)</button>
+                <button type="button" onclick="rt()">Reset(重設)</button>
                 <button type="submit">Submit(送出按鈕)</button>
             </div>
         </form>
@@ -117,7 +117,7 @@
         }
 
 
-        function reset2() {
+        function rt() {
             $("input:text").val('');
             $("input:password").val('');
             $("#ans").text("請拖曳數字到這裡");
